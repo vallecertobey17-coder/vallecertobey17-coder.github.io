@@ -10,7 +10,10 @@
 //        { type: 'tees', designs: [a, b] }      → T-shirt mockups
 //        { type: 'banners', images: [a, b, c] } → stacked ad banners
 //        { type: 'collage', images: [...] }     → a row of images
-//   4. "cats" sets the filters: 'multimedia', 'uiux', 'web'.
+//   4. "cats" sets the category. The FIRST one decides which group the card appears in:
+//        'multimedia' (Multimedia & Design), 'uiux' (UI/UX Design), 'web' (Web Development).
+//   5. "kind" is the short type label on the card (e.g. 'Brand identity'), and "blurb" is the
+//      one-line overview that appears when visitors hover over the card.
 // ─────────────────────────────────────────────────────────────
 
 export type Cover =
@@ -27,8 +30,9 @@ export type Project = {
   cats: ('multimedia' | 'uiux' | 'web')[];
   tags: string[];
   year: string;
-  span: 4 | 5 | 6 | 7 | 8 | 12; // card width on desktop (out of 12 columns)
-  ratio: string; // card image shape, e.g. '4/3'
+  kind: string; // short type label shown on the card, e.g. 'Brand identity'
+  blurb: string; // one-line overview shown when hovering over the card
+  pieces?: string; // optional count label, e.g. '8 screens' (default: number of gallery images)
   label?: string; // small tag on the card, e.g. 'Mockup'
   client: string;
   role: string;
@@ -49,11 +53,12 @@ export const projects: Project[] = [
     slug: 'i-connect-nexus-website',
     title: 'i-Connect NEXUS Website',
     short: 'i-Connect NEXUS Website',
+    kind: 'Website',
+    pieces: '5 pages shown',
+    blurb: 'The official org website, designed and coded: announcements, projects, transparency reports, and an officer login.',
     cats: ['web', 'uiux'],
     tags: ['Web Development', 'UI/UX'],
     year: '2026',
-    span: 8,
-    ratio: '16/10',
     client: 'i-Connect Student Society, URS Binangonan',
     role: 'UI design & front-end development',
     tools: 'Design and code',
@@ -73,11 +78,11 @@ export const projects: Project[] = [
     slug: 'nexus-identity',
     title: 'NEXUS Identity & Launch',
     short: 'NEXUS Identity & Launch',
+    kind: 'Brand identity',
+    blurb: 'Logo, soft launch, and a full term of posts in one deep-blue, cosmic visual system.',
     cats: ['multimedia'],
     tags: ['Branding', 'Publication'],
     year: 'A.Y. 2026–27',
-    span: 4,
-    ratio: '4/5.06',
     client: 'i-Connect Student Society',
     role: 'Brand identity & publication design',
     tools: 'Adobe Photoshop, Canva',
@@ -102,11 +107,11 @@ export const projects: Project[] = [
     slug: 'spark-forward',
     title: 'Spark Forward Publication Materials',
     short: 'Spark Forward Pubmats',
+    kind: 'Pubmat campaign',
+    blurb: 'A five-part IT Skills Competition campaign plus webinar, event, and seasonal posters.',
     cats: ['multimedia'],
     tags: ['Publication', 'Social media'],
     year: 'A.Y. 2025–26',
-    span: 5,
-    ratio: '1/1',
     client: 'i-Connect Student Society',
     role: 'Graphics Committee · publication design',
     tools: 'Adobe Photoshop, Canva',
@@ -132,11 +137,11 @@ export const projects: Project[] = [
     slug: 'the-phantom-merch',
     title: '"The Phantom" Merch',
     short: '"The Phantom" Merch',
+    kind: 'Merch & print',
+    blurb: 'Gritty fight-shirt graphics for a pro boxer, prepared for print.',
     cats: ['multimedia'],
     tags: ['Merch', 'Print'],
     year: 'Jul – Oct 2026',
-    span: 7,
-    ratio: '7/5',
     label: 'Mockup',
     client: 'Fernando "The Phantom" Diaz-Marquez, pro featherweight boxer',
     role: 'Graphic design, merch & print',
@@ -158,11 +163,12 @@ export const projects: Project[] = [
     slug: 'calori',
     title: 'Calori: Calorie Tracking App',
     short: 'Calori App UI',
+    kind: 'Mobile app UI',
+    pieces: '8 screens',
+    blurb: 'An eight-screen calorie tracking app, from onboarding to a daily macro dashboard.',
     cats: ['uiux'],
     tags: ['UI/UX', 'Mobile app'],
     year: '2026',
-    span: 7,
-    ratio: '16/11',
     client: 'Design exercise for an application to Calori',
     role: 'UI/UX design',
     tools: 'Figma',
@@ -181,11 +187,11 @@ export const projects: Project[] = [
     slug: 'myeventplus-ads',
     title: 'MyEventPlus Ad Adaptations',
     short: 'MyEventPlus Ads',
+    kind: 'Ad production',
+    blurb: '200+ ads resized and rebuilt across 1″–8″ placements, in English and Hebrew.',
     cats: ['multimedia'],
     tags: ['Advertising', 'Resizing'],
     year: 'Mar – Aug 2026',
-    span: 5,
-    ratio: '5/5.06',
     client: 'MyEventPlus, event planning & community platform',
     role: 'Ads Manager & Ad Resizer',
     tools: 'Canva, Figma',
@@ -204,11 +210,11 @@ export const projects: Project[] = [
     slug: 'marketing-concepts',
     title: 'Marketing Concepts',
     short: 'Marketing Concepts',
+    kind: 'Ad concepts',
+    blurb: 'Self-initiated ads exploring three industries and tones.',
     cats: ['multimedia'],
     tags: ['Advertising', 'Concept work'],
     year: '2026',
-    span: 12,
-    ratio: '21/8',
     label: 'Concept work',
     client: 'Self-initiated concept pieces',
     role: 'Graphic design',
@@ -225,9 +231,9 @@ export const projects: Project[] = [
   },
 ];
 
-export const categories = [
-  { id: 'all', label: 'All' },
-  { id: 'multimedia', label: 'Multimedia & Design' },
-  { id: 'uiux', label: 'UI/UX' },
-  { id: 'web', label: 'Web Development' },
+// Groups shown in the Work section, in this order.
+export const groups = [
+  { id: 'multimedia', label: 'Multimedia & Design', desc: 'Publication materials, branding, merch, and ad production.' },
+  { id: 'uiux', label: 'UI/UX Design', desc: 'App and interface design, from user flow to final screens.' },
+  { id: 'web', label: 'Web Development', desc: 'Websites I designed and coded, live on the web.' },
 ] as const;

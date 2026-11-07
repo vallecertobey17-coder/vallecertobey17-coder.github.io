@@ -412,3 +412,63 @@ footer{border-top:1px solid var(--line);padding:56px 0 28px;overflow:hidden}
 .nf{min-height:80vh;display:grid;align-content:center;gap:24px;padding:120px 0 80px}
 .nf h1{font-family:var(--display);font-stretch:62%;font-weight:850;text-transform:uppercase;font-size:clamp(96px,22vw,320px);line-height:.8;color:transparent;-webkit-text-stroke:1.5px var(--frost)}
 .visually-hidden{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- WORK: category groups + hover overview ---------- */
+.wgroups{display:grid;gap:clamp(56px,7vw,96px)}
+.wgroup[hidden]{display:none}
+.ghead{display:grid;grid-template-columns:64px minmax(0,1fr) auto;column-gap:20px;row-gap:6px;align-items:baseline;border-top:1px solid var(--line);padding-top:22px;margin-bottom:28px}
+.gnum{color:var(--accent);grid-row:span 2}
+.ghead h3{font-family:var(--display);font-stretch:62%;font-weight:800;text-transform:uppercase;font-size:clamp(34px,4vw,56px);line-height:.9}
+.gdesc{grid-column:2;color:var(--fog);max-width:56ch}
+.gcount{grid-column:3;grid-row:1;color:var(--fog);white-space:nowrap}
+.pgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,2vw,28px)}
+.pcard{display:flex;flex-direction:column;gap:14px}
+.pthumb{position:relative;overflow:hidden;aspect-ratio:4/3;background:var(--graphite);border:1px solid var(--line);transition:border-color .35s}
+.pthumb>.fill{position:absolute;inset:0;transition:transform 1.1s var(--ease),filter .5s}
+.pkind{position:absolute;right:12px;top:12px;z-index:3;font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.14);padding:5px 9px;color:var(--frost)}
+.pover{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:flex-end;gap:14px;padding:clamp(16px,1.6vw,22px);background:linear-gradient(to top,rgba(0,0,0,.94) 0%,rgba(0,0,0,.86) 55%,rgba(0,0,0,.45) 100%);opacity:0;transform:translateY(14px);transition:opacity .4s var(--ease),transform .5s var(--ease);pointer-events:none}
+.pob{font-size:15px;line-height:1.45;max-width:44ch}
+.pom{display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px}
+.pom dt{color:var(--fog);font-size:10.5px;margin-bottom:2px}
+.pom dd{color:#c9cdd3;line-height:1.35}
+.pminis{display:flex;gap:6px;align-items:center}
+.pminis img{width:44px;height:44px;object-fit:cover;border:1px solid rgba(255,255,255,.14)}
+.pminis span{color:var(--fog);font-size:11px;margin-left:4px}
+.pcta{display:inline-flex;gap:8px;font-size:14px;font-weight:500;color:var(--accent)}
+.pmeta{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:16px;row-gap:4px;align-items:baseline}
+.pmeta h4{font-size:clamp(18px,1.5vw,21px);font-weight:500;letter-spacing:-.01em;line-height:1.25}
+.pmeta h4 span{background:linear-gradient(var(--accent),var(--accent)) 0 100%/0 1px no-repeat;transition:background-size .5s var(--ease)}
+.pyear{font-size:11px;white-space:nowrap}
+.psub{grid-column:1/-1;color:var(--fog);font-size:11px}
+.pblurb{grid-column:1/-1;color:#c9cdd3;font-size:14px;line-height:1.45;margin-top:4px}
+@media (hover:hover) and (pointer:fine){
+  .pblurb{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .pcard:hover .pover,.pcard:focus-visible .pover{opacity:1;transform:none}
+  .pcard:hover .pthumb>.fill,.pcard:focus-visible .pthumb>.fill{transform:scale(1.04);filter:blur(2px) brightness(.7)}
+  .pcard:hover .pthumb,.pcard:focus-visible .pthumb{border-color:#3a3f48}
+  .pcard:hover .pmeta h4 span,.pcard:focus-visible .pmeta h4 span{background-size:100% 1px}
+}
+@media (max-width:1080px){ .pgrid{grid-template-columns:repeat(2,minmax(0,1fr))} }
+@media (max-width:760px){
+  .pgrid{grid-template-columns:1fr}
+  .ghead{grid-template-columns:40px minmax(0,1fr)}
+  .gcount{grid-column:2;grid-row:auto}
+}
+@media (prefers-reduced-motion:reduce){ .pover{transform:none} }
+
+/* Single-project groups: a wide featured card with the overview always visible */
+.pcard.feature{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(20px,3vw,48px);align-items:center}
+.pgrid[data-n="1"]{grid-template-columns:1fr}
+.pgrid[data-n="2"]{grid-template-columns:repeat(2,minmax(0,1fr))}
+.pcard.feature .pover{display:none}
+.pcard.feature .pmeta h4{font-size:clamp(24px,2.4vw,34px)}
+.pcard.feature .pblurb{position:static!important;width:auto;height:auto;overflow:visible;clip:auto;white-space:normal;font-size:16px;margin-top:10px;max-width:48ch}
+.pfeat{grid-column:1/-1;display:grid;gap:18px;margin-top:16px;padding-top:18px;border-top:1px solid var(--line)}
+.pfeat .pom{grid-template-columns:1fr 1fr;gap:14px 20px}
+@media (hover:hover) and (pointer:fine){
+  .pcard.feature:hover .pthumb>.fill{filter:none}
+}
+@media (max-width:760px){
+  .pcard.feature{grid-template-columns:1fr}
+  .pgrid[data-n="2"]{grid-template-columns:1fr}
+}

@@ -70,33 +70,27 @@ const ro = new IntersectionObserver(
 );
 $$('.reveal').forEach((el) => ro.observe(el));
 
-/* ---------- Work filters ---------- */
-const grid = $('#grid');
+/* ---------- Work filters: show one category group or all ---------- */
 const chips = $$<HTMLButtonElement>('.chip[data-f]');
 chips.forEach((b) => b.addEventListener('click', () => {
   const f = b.dataset.f!;
   chips.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
-  grid?.classList.toggle('all', f === 'all');
   let shown = 0;
-  $$<HTMLElement>('#grid .card').forEach((c) => {
-    const on = f === 'all' || c.dataset.cats!.split(' ').includes(f);
-    c.hidden = !on;
-    if (on) shown++;
+  $$<HTMLElement>('#grid .wgroup').forEach((g) => {
+    const on = f === 'all' || g.dataset.group === f;
+    g.hidden = !on;
+    if (on) shown += g.querySelectorAll('.pcard').length;
   });
   const status = $('#filterStatus');
   if (status) status.textContent = `Showing ${shown} ${shown === 1 ? 'project' : 'projects'}`;
 }));
 
-/* ---------- Cursor label, experience hover preview, magnetic buttons ---------- */
-const cursor = $('#cursor');
+/* ---------- Experience hover preview, magnetic buttons ---------- */
 const peek = $<HTMLImageElement>('#peek');
 if (finePointer && !reduced) {
   addEventListener('pointermove', (e) => {
-    if (cursor) { cursor.style.left = `${e.clientX}px`; cursor.style.top = `${e.clientY}px`; }
     if (peek) { peek.style.left = `${e.clientX + 150}px`; peek.style.top = `${e.clientY}px`; }
   }, { passive: true });
-  grid?.addEventListener('pointerover', (e) => cursor?.classList.toggle('on', !!(e.target as Element).closest('.card')));
-  grid?.addEventListener('pointerleave', () => cursor?.classList.remove('on'));
   $$<HTMLElement>('.xp > li[data-peek]').forEach((li) => {
     li.addEventListener('pointerenter', () => { if (peek) { peek.src = li.dataset.peek!; peek.classList.add('on'); } });
     li.addEventListener('pointerleave', () => peek?.classList.remove('on'));

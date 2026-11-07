@@ -4,7 +4,7 @@ import ProjectCover from '../components/ProjectCover.astro';
 import Strip from '../components/Strip.astro';
 import { site } from '../data/site';
 import { about } from '../data/about';
-import { projects, categories } from '../data/projects';
+import { projects, groups } from '../data/projects';
 import { experience } from '../data/experience';
 import { featuredOrg, roles as orgRoles, leadershipIntro, leadershipStats } from '../data/leadership';
 import { education } from '../data/education';
@@ -12,7 +12,9 @@ import { services, tools } from '../data/skills';
 import { certifications } from '../data/certifications';
 import { icons } from '../data/icons';
 
-const count = (id: string) => projects.filter((p) => id === 'all' || p.cats.includes(id as any)).length;
+const inGroup = (id: string) => projects.filter((p) => p.cats[0] === id);
+const shownGroups = groups.filter((g) => inGroup(g.id).length > 0);
+const pieces = (p: (typeof projects)[number]) => p.pieces ?? `${p.gallery.length} ${p.gallery.length === 1 ? 'image' : 'pieces'}`;
 const pad = (n: number) => String(n).padStart(2, '0');
 const statement = about.statement.split(/(\*[^*]+\*)/).map((s) => (s.startsWith('*') ? { em: true, t: s.slice(1, -1) } : { em: false, t: s }));
 ---
@@ -80,21 +82,62 @@ const statement = about.statement.split(/(\*[^*]+\*)/).map((s) => (s.startsWith(
       <div class="sec-head reveal">
         <span class="idx mono">01 / Selected work</span>
         <h2 id="work-h">Work</h2>
-        <p class="aside">{projects.length} projects across multimedia design, UI/UX, and web development. Select any project to see the full case.</p>
+        <p class="aside">{projects.length} projects across multimedia design, UI/UX, and web development. Grouped by discipline, each with a quick overview. Open any project for the full case.</p>
       </div>
-      <div class="filters" role="group" aria-label="Filter projects">
-        {categories.map((c, i) => <button class="chip" type="button" data-f={c.id} aria-pressed={i === 0 ? 'true' : 'false'}>{c.label} <sup>{count(c.id)}</sup></button>)}
+      <div class="filters" role="group" aria-label="Show projects by category">
+        <button class="chip" type="button" data-f="all" aria-pressed="true">All <sup>{projects.length}</sup></button>
+        {shownGroups.map((g) => <button class="chip" type="button" data-f={g.id} aria-pressed="false">{g.label} <sup>{inGroup(g.id).length}</sup></button>)}
       </div>
       <p class="visually-hidden" id="filterStatus" aria-live="polite"></p>
-      <div class="grid all" id="grid">
-        {projects.map((p, i) => (
-          <a class="card reveal" href={`/work/${p.slug}/`} data-cats={p.cats.join(' ')} data-span={p.span}>
-            <div class="thumb" style={`--ar:${p.ratio}`}><ProjectCover cover={p.cover} label={p.label} /></div>
-            <div class="card-meta">
-              <span class="n mono">{pad(i + 1)}</span><h3><span>{p.short}</span></h3><span class="mono muted">{p.year}</span>
-              <div class="tags">{p.tags.map((t) => <span class="tag">{t}</span>)}</div>
+      <div class="wgroups" id="grid">
+        {shownGroups.map((g, gi) => (
+          <section class="wgroup" data-group={g.id} aria-labelledby={`g-${g.id}`}>
+            <header class="ghead reveal">
+              <span class="gnum mono">{pad(gi + 1)}</span>
+              <h3 id={`g-${g.id}`}>{g.label}</h3>
+              <p class="gdesc">{g.desc}</p>
+              <span class="gcount mono">{inGroup(g.id).length} {inGroup(g.id).length === 1 ? 'project' : 'projects'}</span>
+            </header>
+            <div class="pgrid" data-n={Math.min(inGroup(g.id).length, 3)}>
+              {inGroup(g.id).map((p) => (
+                <a class={`pcard reveal${inGroup(g.id).length === 1 ? ' feature' : ''}`} href={`/work/${p.slug}/`}>
+                  <div class="pthumb">
+                    <ProjectCover cover={p.cover} label={p.label} />
+                    <span class="pkind">{p.kind}</span>
+                    <div class="pover" aria-hidden="true">
+                      <p class="pob">{p.blurb}</p>
+                      <dl class="pom">
+                        <div><dt class="mono">Role</dt><dd>{p.role}</dd></div>
+                        <div><dt class="mono">Tools</dt><dd>{p.tools}</dd></div>
+                      </dl>
+                      <div class="pminis">
+                        {p.gallery.slice(0, 4).map((s) => <img src={s} alt="" loading="lazy" decoding="async">)}
+                        {p.gallery.length > 4 && <span class="mono">+{p.gallery.length - 4}</span>}
+                      </div>
+                      <span class="pcta">View project <span aria-hidden="true">→</span></span>
+                    </div>
+                  </div>
+                  <div class="pmeta">
+                    <h4><span>{p.short}</span></h4>
+                    <span class="mono muted pyear">{p.year}</span>
+                    <p class="psub mono">{p.kind} · {pieces(p)}</p>
+                    <p class="pblurb">{p.blurb}</p>
+                    {inGroup(g.id).length === 1 && (
+                      <div class="pfeat">
+                        <dl class="pom">
+                          <div><dt class="mono">Client</dt><dd>{p.client}</dd></div>
+                          <div><dt class="mono">Role</dt><dd>{p.role}</dd></div>
+                          <div><dt class="mono">Tools</dt><dd>{p.tools}</dd></div>
+                          <div><dt class="mono">Includes</dt><dd>{pieces(p)}</dd></div>
+                        </dl>
+                        <span class="pcta">View project <span aria-hidden="true">→</span></span>
+                      </div>
+                    )}
+                  </div>
+                </a>
+              ))}
             </div>
-          </a>
+          </section>
         ))}
       </div>
     </div>

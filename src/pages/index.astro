@@ -1,0 +1,258 @@
+---
+import Base from '../layouts/Base.astro';
+import ProjectCover from '../components/ProjectCover.astro';
+import Strip from '../components/Strip.astro';
+import { site } from '../data/site';
+import { about } from '../data/about';
+import { projects, categories } from '../data/projects';
+import { experience } from '../data/experience';
+import { featuredOrg, roles as orgRoles, leadershipIntro, leadershipStats } from '../data/leadership';
+import { education } from '../data/education';
+import { services, tools } from '../data/skills';
+import { certifications } from '../data/certifications';
+import { icons } from '../data/icons';
+
+const count = (id: string) => projects.filter((p) => id === 'all' || p.cats.includes(id as any)).length;
+const pad = (n: number) => String(n).padStart(2, '0');
+const statement = about.statement.split(/(\*[^*]+\*)/).map((s) => (s.startsWith('*') ? { em: true, t: s.slice(1, -1) } : { em: false, t: s }));
+---
+<Base home>
+  <!-- HERO -->
+  <section class="hero" id="top" aria-label="Introduction">
+    <div class="hero-grid"></div>
+    <div class="glow"></div>
+    <div class="wrap">
+      <div class="hero-meta mono"><span>Portfolio · {new Date().getFullYear()}</span><span>{site.location} · Working worldwide</span></div>
+      <div class="stage">
+        <h1 class="name solid" aria-label={site.name}><span class="ln"><span>Tobey</span></span><span class="ln l2"><span>Vallecer</span></span></h1>
+        <div class="photo"><img src="/images/brand/tobey-cutout.webp" alt="Portrait of Tobey Vallecer in a black shirt, hand on chin" width="1020" height="1684" fetchpriority="high"></div>
+        <div class="name outline" aria-hidden="true"><span class="ln"><span>Tobey</span></span><span class="ln l2"><span>Vallecer</span></span></div>
+      </div>
+    </div>
+    <div class="wrap">
+      <div class="hero-bottom">
+        <div class="intro">
+          <p>{site.intro}</p>
+          <div class="ctas">
+            <a class="btn solid" href="#work">Explore my work <span class="arr" aria-hidden="true">→</span></a>
+            <a class="btn" href="#contact">Get in touch</a>
+          </div>
+        </div>
+        <ul class="roles" id="roles" aria-label="What I do">
+          {site.roles.map((r, i) => <li><b>{r}</b><span class="mono">{pad(i + 1)}</span></li>)}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOOLS CAROUSEL -->
+  <section class="wrap tools-band" id="tools" aria-labelledby="tools-h">
+    <div class="tools-head"><h2 class="mono muted" id="tools-h">Tools I work with · {tools.length}</h2><button class="pp mono" id="ppBtn" type="button" aria-pressed="false">❚❚ Pause</button></div>
+    <div class="tcar">
+      <div class="ttrack" id="ttrack">
+        {[0, 1].map((copy) => tools.map((t) => (
+          <div class="ttile" aria-hidden={copy === 1 ? 'true' : undefined}>
+            <div class="top">
+              {t.icon && icons[t.icon] ? <svg viewBox="0 0 24 24" aria-hidden="true"><path d={icons[t.icon]} /></svg> : <span class="mg" aria-hidden="true">{t.badge}</span>}
+              <span class="grp">{t.group}</span>
+            </div>
+            <b>{t.name}</b>
+          </div>
+        )))}
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="pillars">
+      {site.pillars.map((p, i) => <div class="pillar"><span class="mono muted">Pillar {pad(i + 1)}</span><h3>{p.title}</h3><p>{p.text}</p></div>)}
+    </div>
+  </div>
+  <div class="marquee" aria-label="Clients and organizations I've worked with">
+    <div class="track">
+      {[0, 1].map((copy) => site.clients.map((c) => <span aria-hidden={copy === 1 ? 'true' : undefined}>{c}</span>))}
+    </div>
+  </div>
+
+  <!-- WORK -->
+  <section class="block" id="work" aria-labelledby="work-h">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="idx mono">01 / Selected work</span>
+        <h2 id="work-h">Work</h2>
+        <p class="aside">{projects.length} projects across multimedia design, UI/UX, and web development. Select any project to see the full case.</p>
+      </div>
+      <div class="filters" role="group" aria-label="Filter projects">
+        {categories.map((c, i) => <button class="chip" type="button" data-f={c.id} aria-pressed={i === 0 ? 'true' : 'false'}>{c.label} <sup>{count(c.id)}</sup></button>)}
+      </div>
+      <p class="visually-hidden" id="filterStatus" aria-live="polite"></p>
+      <div class="grid all" id="grid">
+        {projects.map((p, i) => (
+          <a class="card reveal" href={`/work/${p.slug}/`} data-cats={p.cats.join(' ')} data-span={p.span}>
+            <div class="thumb" style={`--ar:${p.ratio}`}><ProjectCover cover={p.cover} label={p.label} /></div>
+            <div class="card-meta">
+              <span class="n mono">{pad(i + 1)}</span><h3><span>{p.short}</span></h3><span class="mono muted">{p.year}</span>
+              <div class="tags">{p.tags.map((t) => <span class="tag">{t}</span>)}</div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="block" id="about" aria-labelledby="about-h" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="idx mono">02 / About</span><h2 id="about-h">About</h2></div>
+      <div class="about">
+        <p class="statement reveal">{statement.map((s) => (s.em ? <em>{s.t}</em> : s.t))}</p>
+        <div class="copy reveal">{about.paragraphs.map((p) => <p>{p}</p>)}</div>
+        <dl class="facts reveal">
+          {about.facts.map((f) => <div><dt class="mono">{f.label}</dt><dd>{f.value}</dd></div>)}
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section class="block" id="experience" aria-labelledby="xp-h" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="idx mono">03 / Experience</span>
+        <h2 id="xp-h">Experience</h2>
+        <p class="aside">Freelance, part-time, and remote roles, most recent first.</p>
+      </div>
+      <ol class="xp">
+        {experience.map((e) => (
+          <li class="reveal" data-peek={e.peek}>
+            <div class="when"><span class="mono">{e.when}</span><span class="mono">{e.type}</span></div>
+            <div class="who">
+              <h3>{e.role}</h3>
+              <p>{e.org} · {e.sub}</p>
+              {e.logo && <img class={`logo${e.logoFree ? ' free' : ''}`} src={e.logo} alt={`${e.org} logo`} width="56" height="56" loading="lazy">}
+            </div>
+            <div class="what">
+              <ul>{e.did.map((d) => <li>{d}</li>)}</ul>
+              <div class="tools">{e.tools.map((t) => <span class="tag">{t}</span>)}</div>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+    <img class="peek" id="peek" alt="" aria-hidden="true">
+  </section>
+
+  <!-- LEADERSHIP -->
+  <section class="block lead-band" id="leadership" aria-labelledby="lead-h">
+    <div class="wrap lead">
+      <div class="lead-side reveal">
+        <span class="mono muted">04 / Leadership</span>
+        <h2 id="lead-h">Leader&shy;ship</h2>
+        <p class="muted" style="max-width:36ch">{leadershipIntro}</p>
+        <div class="stats">{leadershipStats.map((s) => <div><b>{s.value}</b><span class="mono muted">{s.label}</span></div>)}</div>
+      </div>
+      <div class="lead-main">
+        <article class="org reveal">
+          <div class="org-head">
+            <img src={featuredOrg.logo} alt={`${featuredOrg.name} logo`} width="64" height="64" loading="lazy">
+            <div><h3>{featuredOrg.name}</h3><p class="muted">{featuredOrg.sub}</p></div>
+          </div>
+          <div class="terms">
+            {featuredOrg.terms.map((t) => (
+              <div class="term">
+                <span class="mono muted">{t.year}</span>
+                <span class="theme">{t.theme}</span>
+                <span class="role">{t.role}</span>
+                <p>{t.text}</p>
+                <Strip items={t.work} group={`term-${t.theme}`} label={`${t.theme} work`} />
+              </div>
+            ))}
+          </div>
+        </article>
+        <div class="roles-list reveal">
+          {orgRoles.map((r) => (
+            <div class="role-row">
+              <img class="lg" src={r.logo} alt={r.logoAlt} width="56" height="56" loading="lazy">
+              <div>
+                <h4>{r.role}</h4><p>{r.org}</p>
+                {r.note && <p class="note">{r.note}</p>}
+                {r.work && <Strip items={r.work} group={`role-${r.role}`} label={`${r.role} work`} />}
+              </div>
+              <span class="mono muted">{r.year}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section class="block" id="education" aria-labelledby="edu-h">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="idx mono">05 / Education</span><h2 id="edu-h">Education</h2></div>
+      <div class="edu">
+        {education.map((e) => (
+          <div class="edu-row reveal">
+            <span class="yr" aria-hidden="true">{e.mark}</span>
+            <div class="school"><h3>{e.school}</h3><p>{e.program.map((l, i) => <>{i > 0 && <br />}{l}</>)}</p></div>
+            <ul class="honors">{e.honors.map((h) => <li>{h}</li>)}</ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="block" id="skills" aria-labelledby="sk-h" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="idx mono">06 / Skills &amp; services</span><h2 id="sk-h">Skills</h2><p class="aside">The services I offer. The tools behind them are in the carousel at the top of the page.</p></div>
+      <div class="skills"><ol class="caps reveal">{services.map((s) => <li>{s}</li>)}</ol></div>
+    </div>
+  </section>
+
+  <!-- CERTIFICATIONS -->
+  <section class="block" id="certifications" aria-labelledby="ce-h" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="idx mono">07 / Certifications</span><h2 id="ce-h">Certified</h2></div>
+      <div class="certs">
+        {certifications.map((c) => (
+          <article class="cert reveal">
+            <div class="issuer mono"><span>{c.issuer}</span><span>{c.year}</span></div>
+            <h3>{c.title}</h3>
+            <div class="rule"></div>
+            <a class="link" href={c.verify} target="_blank" rel="noopener">{c.verifyLabel} ↗<span class="visually-hidden"> (opens in a new tab)</span></a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="block lead-band" id="contact" aria-labelledby="co-h">
+    <div class="wrap contact">
+      <div class="contact-left reveal">
+        <span class="mono muted">08 / Contact</span>
+        <h2 id="co-h">Let's make it <em>sharp.</em></h2>
+        <p class="muted" style="max-width:40ch">Freelance projects, full-time roles, and collaborations are all welcome. Tell me what you need and I'll reply by email.</p>
+        <ul class="channels">
+          <li><a href={`mailto:${site.email}`}><span>{site.email}</span><span class="mono">Email ↗</span></a></li>
+          <li><a href={site.linkedin} target="_blank" rel="noopener"><span>LinkedIn</span><span class="mono">Profile ↗</span></a></li>
+          <li><a href={site.github} target="_blank" rel="noopener"><span>GitHub</span><span class="mono">{site.githubHandle} ↗</span></a></li>
+          <li><a href={site.cv} download><span>Download CV</span><span class="mono">PDF ↓</span></a></li>
+        </ul>
+      </div>
+      <form class="cf reveal" id="cf" novalidate data-formspree={site.formspreeId} data-email={site.email} action={site.formspreeId ? `https://formspree.io/f/${site.formspreeId}` : undefined} method="POST">
+        <div class="field"><label for="f-name">Your name</label><input id="f-name" name="name" autocomplete="name" required><span class="msg" aria-live="polite"></span></div>
+        <div class="field"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" required><span class="msg" aria-live="polite"></span></div>
+        <div class="field full"><label for="f-type">What's this about?</label>
+          <select id="f-type" name="type" required>
+            <option value="">Choose one</option><option>Freelance project</option><option>Full-time or part-time role</option><option>Collaboration</option><option>Something else</option>
+          </select><span class="msg" aria-live="polite"></span></div>
+        <div class="field full"><label for="f-msg">Message</label><textarea id="f-msg" name="message" required placeholder="A few lines about the project, timeline, and links if you have them."></textarea><span class="msg" aria-live="polite"></span></div>
+        <input class="hp" type="text" name="_gotcha" id="f-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <div class="notice" id="notice" role="status" aria-live="polite"></div>
+        <div class="form-foot"><span class="mono muted">{site.replyTime}</span><button class="btn solid" type="submit" id="send">Send message <span class="arr" aria-hidden="true">→</span></button></div>
+      </form>
+    </div>
+  </section>
+</Base>

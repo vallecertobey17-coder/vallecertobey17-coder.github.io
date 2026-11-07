@@ -1,0 +1,13 @@
+---
+// A row of small thumbnails that open in the lightbox.
+interface Props { items: string[]; group: string; label: string }
+const { items, group, label } = Astro.props;
+const srcs = items.map((n) => `/images/work/${n}.webp`);
+---
+<div class="strip">
+  {srcs.map((src, k) => (
+    <button type="button" data-lb={group} data-src={src} aria-label={`${label}: view image ${k + 1} of ${srcs.length}`}>
+      <img src={src} alt="" loading="lazy" decoding="async" width="76" height="76">
+    </button>
+  ))}
+</div>

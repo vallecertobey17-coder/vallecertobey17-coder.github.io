@@ -1,0 +1,124 @@
+---
+import '../styles/global.css';
+import { site } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  home?: boolean;
+}
+const { title, description = site.description, image = '/images/og-image.jpg', home = false } = Astro.props;
+const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · Multimedia Creative, UI/UX Designer & Web Developer`;
+const canonical = new URL(Astro.url.pathname, site.url).href;
+const ogImage = new URL(image, site.url).href;
+// On project pages, section links must point back to the homepage.
+const h = (id: string) => (home ? `#${id}` : `/#${id}`);
+const navLinks = [
+  ['work', 'Work'],
+  ['about', 'About'],
+  ['experience', 'Experience'],
+  ['leadership', 'Leadership'],
+  ['contact', 'Contact'],
+];
+const sheetLinks = [
+  ['work', 'Work'],
+  ['about', 'About'],
+  ['experience', 'Experience'],
+  ['leadership', 'Leadership'],
+  ['education', 'Education'],
+  ['skills', 'Skills'],
+  ['contact', 'Contact'],
+];
+const personLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.name,
+  url: site.url,
+  jobTitle: 'Multimedia Creative, UI/UX Designer & Web Developer',
+  address: { '@type': 'PostalAddress', addressRegion: 'Rizal', addressCountry: 'PH' },
+  sameAs: [site.linkedin, site.github],
+};
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{fullTitle}</title>
+  <meta name="description" content={description}>
+  <link rel="canonical" href={canonical}>
+  <meta name="theme-color" content="#000000">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content={fullTitle}>
+  <meta property="og:description" content={description}>
+  <meta property="og:url" content={canonical}>
+  <meta property="og:image" content={ogImage}>
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="sitemap" href="/sitemap-index.xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  {home && <link rel="preload" as="image" href="/images/brand/tobey-cutout.webp">}
+  <script type="application/ld+json" set:html={JSON.stringify(personLd)} />
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav" id="nav">
+    <div class="wrap">
+      <a class="brand" href={home ? '#top' : '/'} aria-label={`${site.name}, home`}><span class="mark">TV</span><span>{site.name}</span></a>
+      <nav aria-label="Primary">
+        <ul>
+          {navLinks.map(([id, label]) => <li><a href={h(id)} data-section={id}>{label}</a></li>)}
+        </ul>
+      </nav>
+      <div class="nav-right">
+        {site.available && <span class="status"><span class="dot"></span>{site.availableText}</span>}
+        <a class="btn small" href={h('contact')}>Let's talk <span class="arr" aria-hidden="true">→</span></a>
+        <button class="menu-btn" id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="sheet"><span></span><span></span></button>
+      </div>
+    </div>
+    <div class="progress" id="progress"></div>
+  </header>
+
+  <div class="sheet" id="sheet" aria-hidden="true">
+    <ol>
+      {sheetLinks.map(([id, label], i) => <li><a href={h(id)} tabindex="-1"><span class="mono">{String(i + 1).padStart(2, '0')}</span>{label}</a></li>)}
+    </ol>
+    <div class="mono muted">{site.available ? `${site.availableText} · ` : ''}{site.location}</div>
+  </div>
+
+  <main id="main">
+    <slot />
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="foot-top">
+        <span>{site.name} · Multimedia Creative, UI/UX Designer &amp; Web Developer</span>
+        <nav aria-label="Footer">
+          <a href={h('work')}>Work</a><a href={h('experience')}>Experience</a><a href={h('leadership')}>Leadership</a>
+          <a href={site.linkedin} target="_blank" rel="noopener">LinkedIn ↗</a><a href={site.github} target="_blank" rel="noopener">GitHub ↗</a>
+        </nav>
+      </div>
+      <div class="wordmark" aria-hidden="true">{site.name}</div>
+      <div class="foot-bottom mono"><span>© {new Date().getFullYear()} {site.name}</span><a href={home ? '#top' : '/'}>{home ? 'Back to top ↑' : 'Home ↑'}</a></div>
+    </div>
+  </footer>
+
+  <div class="cursor" id="cursor" aria-hidden="true">View project</div>
+  <div class="lightbox" id="lb" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <button class="lb-btn lb-close" id="lbClose" type="button" aria-label="Close">✕</button>
+    <button class="lb-btn lb-prev" id="lbPrev" type="button" aria-label="Previous image">←</button>
+    <img id="lbImg" alt="">
+    <button class="lb-btn lb-next" id="lbNext" type="button" aria-label="Next image">→</button>
+    <span class="lb-count mono" id="lbCount"></span>
+  </div>
+
+  <script>
+    import '../scripts/main.ts';
+  </script>
+</body>
+</html>

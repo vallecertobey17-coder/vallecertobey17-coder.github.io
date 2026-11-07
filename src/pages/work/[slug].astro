@@ -1,0 +1,50 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProjectCover from '../../components/ProjectCover.astro';
+import { projects } from '../../data/projects';
+
+export function getStaticPaths() {
+  return projects.map((p, i) => ({ params: { slug: p.slug }, props: { p, i } }));
+}
+const { p, i } = Astro.props;
+const next = projects[(i + 1) % projects.length];
+const pad = (n: number) => String(n).padStart(2, '0');
+const ogImage = p.cover.type === 'image' ? p.cover.src : p.gallery[0];
+---
+<Base title={p.title} description={p.summary} image={ogImage}>
+  <article class="detail">
+    <div class="wrap">
+      <a class="back mono" href="/#work">← All work</a>
+      <span class="mono muted">{pad(i + 1)} / {p.tags.join(' · ')}</span>
+      <h1 class="d-title">{p.title}</h1>
+      <dl class="d-meta">
+        <div><dt class="mono">Client</dt><dd>{p.client}</dd></div>
+        <div><dt class="mono">My role</dt><dd>{p.role}</dd></div>
+        <div><dt class="mono">Timeline</dt><dd>{p.year}</dd></div>
+        <div><dt class="mono">Tools</dt><dd>{p.tools}</dd></div>
+      </dl>
+      <div class="d-hero"><ProjectCover cover={p.cover} label={p.label} eager /></div>
+      <div class="d-body">
+        <p class="lede">{p.summary}</p>
+        <div class="side">
+          <div><h2 class="mono muted" style="margin-bottom:12px">What I did</h2><ul>{p.did.map((d) => <li>{d}</li>)}</ul></div>
+          {p.links && p.links.length > 0 && (
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+              {p.links.map((l) => <a class="btn small" href={l.url} target="_blank" rel="noopener">{l.text} ↗</a>)}
+            </div>
+          )}
+          {p.note && <p class="tagnote" style="white-space:normal;line-height:1.5">{p.note}</p>}
+        </div>
+      </div>
+      <h2 class="mono muted" style="margin-bottom:16px">Gallery · {p.gallery.length} {p.gallery.length === 1 ? 'image' : 'images'}</h2>
+      <div class="gallery">
+        {p.gallery.map((src, k) => (
+          <button type="button" data-lb="gallery" data-src={src} aria-label={`Open image ${k + 1} of ${p.gallery.length}`}>
+            <img src={src} alt={`${p.title}, image ${k + 1}`} loading={k < 3 ? 'eager' : 'lazy'} decoding="async">
+          </button>
+        ))}
+      </div>
+      <a class="next" href={`/work/${next.slug}/`}><span class="mono">Next project →</span><b>{next.short}</b></a>
+    </div>
+  </article>
+</Base>

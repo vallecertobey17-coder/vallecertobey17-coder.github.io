@@ -1,0 +1,40 @@
+---
+import type { Cover } from '../data/projects';
+interface Props { cover: Cover; label?: string; eager?: boolean }
+const { cover, label, eager = false } = Astro.props;
+const loading = eager ? 'eager' : 'lazy';
+// Flat T-shirt silhouette used for merch mockups.
+const teePath = 'M128 22 L166 8 Q200 38 234 8 L272 22 L382 74 L346 156 L302 136 L304 432 L96 432 L98 136 L54 156 L18 74 Z';
+---
+{cover.type === 'image' && (
+  <div class="fill" style={cover.bg ? `background:${cover.bg}` : undefined}>
+    <img class="cover" src={cover.src} alt="" loading={loading} decoding="async" style={cover.position ? `object-position:${cover.position}` : undefined}>
+  </div>
+)}
+{cover.type === 'browser' && (
+  <div class="fill" style="background:radial-gradient(circle at 70% 0,#1d2b5c,#070a16 70%)">
+    <div class="browser"><div class="bar"><i></i><i></i><i></i><em>{cover.url}</em></div><img src={cover.src} alt="" loading={loading} decoding="async"></div>
+    {cover.mobile && <img class="phone" src={cover.mobile} alt="" loading={loading} decoding="async">}
+  </div>
+)}
+{cover.type === 'tees' && (
+  <div class="fill"><div class="tee-stage">
+    {cover.designs.map((d) => (
+      <svg class="tee" viewBox="0 0 400 440" role="img" aria-label="T-shirt mockup">
+        <path d={teePath} fill="#f4f4f2" />
+        <path d="M96 140 L98 432 L130 432 L126 150Z M304 140 L302 432 L270 432 L274 150Z" fill="#000" opacity=".05" />
+        <path d="M166 8 Q200 38 234 8 Q200 52 166 8Z" fill="#d6d6d3" />
+        <image href={d} x="128" y="96" width="144" height="190" preserveAspectRatio="xMidYMid meet" style="mix-blend-mode:multiply" />
+      </svg>
+    ))}
+  </div></div>
+)}
+{cover.type === 'banners' && (
+  <div class="fill"><div class="banners">{cover.images.map((s) => <img src={s} alt="" loading={loading} decoding="async">)}</div></div>
+)}
+{cover.type === 'collage' && (
+  <div class="fill" style="background:#0d0f12"><div class="stack" style={`grid-template-columns:repeat(${cover.images.length},1fr)`}>
+    {cover.images.map((s) => <img src={s} alt="" loading={loading} decoding="async">)}
+  </div></div>
+)}
+{label && <span class="label-corner tagnote">{label}</span>}

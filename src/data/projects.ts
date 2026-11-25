@@ -195,8 +195,8 @@ export const projects: Project[] = [
     title: 'Video Editing & Motion',
     short: 'Video Edits',
     kind: 'Video editing',
-    blurb: 'A product video for a health information system and an animated logo-reveal teaser.',
-    pieces: '2 videos',
+    blurb: 'A health-system product video and two animated teasers for i-CSS events.',
+    pieces: '3 videos',
     cats: ['multimedia'],
     tags: ['Video editing', 'Motion'],
     year: '2026',
@@ -204,14 +204,15 @@ export const projects: Project[] = [
     role: 'Video editing & motion graphics',
     tools: 'CapCut',
     summary:
-      'Edited and animated videos: a product video for SMILECare, an integrated health information system with AI-assisted inventory and scheduling, and the NEXUSPATH logo-reveal teaser for the i-Connect Student Society roadmap.',
+      'Edited and animated videos: a product video for SMILECare, an integrated health information system with AI-assisted inventory and scheduling, plus two teasers for the i-Connect Student Society: the NEXUSPATH roadmap logo reveal and a vertical Hackathon announcement.',
     did: [
       'Edited a 1:40 product video that walks through SMILECare’s mobile app, AI health assistant, and operations dashboards',
       'Animated a 24-second NEXUSPATH logo reveal with light, particle, and zoom effects for the i-CSS roadmap announcement',
-      'Timed on-screen text and transitions so each feature reads clearly',
+      'Created a 48-second vertical Hackathon teaser (“Three destinies. Three portals will open soon.”) for social media',
+      'Timed on-screen text and transitions so each message reads clearly',
     ],
     cover: { type: 'video', poster: w('smilecare-poster') },
-    gallery: [w('smilecare-poster'), w('nexuspath-teaser-poster')],
+    gallery: [w('smilecare-poster'), w('nexuspath-teaser-poster'), w('hackathon-teaser-poster')],
     videos: [
       {
         src: '/videos/smilecare-promo.mp4',
@@ -226,6 +227,13 @@ export const projects: Project[] = [
         title: 'NEXUSPATH teaser',
         caption: 'Logo reveal for the i-Connect Student Society roadmap. 0:24.',
         ratio: '4/3',
+      },
+      {
+        src: '/videos/hackathon-teaser.mp4',
+        poster: w('hackathon-teaser-poster'),
+        title: 'Hackathon teaser',
+        caption: 'Vertical announcement teaser for i-Connect × NEXUS. 0:48.',
+        ratio: '9/16',
       },
     ],
   },

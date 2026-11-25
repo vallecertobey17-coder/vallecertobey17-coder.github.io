@@ -12,6 +12,9 @@ import { services, tools } from '../data/skills';
 import { certifications } from '../data/certifications';
 import { icons } from '../data/icons';
 
+const reelProject = projects.find((p) => p.slug === 'video-edits');
+const reel = reelProject?.videos ?? [];
+const ratioNum = (r: string) => { const [a, b] = r.split('/').map(Number); return a / b; };
 const inGroup = (id: string) => projects.filter((p) => p.cats[0] === id);
 const shownGroups = groups.filter((g) => inGroup(g.id).length > 0);
 const pieces = (p: (typeof projects)[number]) => p.pieces ?? `${p.gallery.length} ${p.gallery.length === 1 ? 'image' : 'pieces'}`;
@@ -75,6 +78,29 @@ const statement = about.statement.split(/(\*[^*]+\*)/).map((s) => (s.startsWith(
       {[0, 1].map((copy) => site.clients.map((c) => <span aria-hidden={copy === 1 ? 'true' : undefined}>{c}</span>))}
     </div>
   </div>
+
+  <!-- FEATURED VIDEOS -->
+  {reel.length > 0 && (
+    <section class="block reel" id="reel" aria-labelledby="reel-h">
+      <div class="wrap">
+        <div class="reel-head reveal">
+          <span class="mono muted">Featured edits</span>
+          <h2 id="reel-h">Motion &amp; Video</h2>
+          <a class="link" href={`/work/${reelProject!.slug}/`}>See the project →</a>
+        </div>
+        <div class="reel-row">
+          {reel.map((v) => (
+            <figure class="reel-item" style={`--grow:${ratioNum(v.ratio).toFixed(4)}`}>
+              <video class="reel-v" muted loop playsinline controls preload="metadata" poster={v.poster} style={`aspect-ratio:${v.ratio}`} aria-label={v.title}>
+                <source src={v.src} type="video/mp4" />
+              </video>
+              <figcaption><b>{v.title}</b><span class="muted">{v.caption}</span></figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
 
   <!-- WORK -->
   <section class="block" id="work" aria-labelledby="work-h">

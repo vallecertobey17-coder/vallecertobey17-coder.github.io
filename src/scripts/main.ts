@@ -70,6 +70,17 @@ const ro = new IntersectionObserver(
 );
 $$('.reveal').forEach((el) => ro.observe(el));
 
+/* ---------- Featured videos: play silently while on screen ---------- */
+const reelVideos = $$<HTMLVideoElement>('.reel-v');
+if (reelVideos.length && !reduced && 'IntersectionObserver' in window) {
+  const vo = new IntersectionObserver((entries) => entries.forEach((e) => {
+    const v = e.target as HTMLVideoElement;
+    if (e.isIntersecting) v.play().catch(() => {});
+    else v.pause();
+  }), { threshold: 0.4 });
+  reelVideos.forEach((v) => vo.observe(v));
+}
+
 /* ---------- Work filters: show one category group or all ---------- */
 const chips = $$<HTMLButtonElement>('.chip[data-f]');
 chips.forEach((b) => b.addEventListener('click', () => {

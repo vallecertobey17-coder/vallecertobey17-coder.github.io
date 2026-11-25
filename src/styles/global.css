@@ -481,3 +481,21 @@ footer{border-top:1px solid var(--line);padding:56px 0 28px;overflow:hidden}
 .vid video{width:100%;max-height:82vh;background:#000;border:1px solid var(--line);display:block}
 .vid figcaption{font-size:15px}
 .vid figcaption b{font-weight:500}
+
+/* ---------- HOMEPAGE VIDEO REEL ---------- */
+.reel{padding-bottom:0}
+.reel-head{display:flex;align-items:baseline;gap:24px;flex-wrap:wrap;margin-bottom:28px}
+.reel-head h2{font-family:var(--display);font-stretch:62%;font-weight:800;text-transform:uppercase;font-size:clamp(44px,6vw,88px);line-height:.88;margin-right:auto}
+.reel-head .mono{flex-basis:100%}
+.reel-row{display:flex;gap:clamp(12px,1.6vw,20px);align-items:flex-start}
+.reel-item{flex:var(--grow) 1 0;min-width:0;display:grid;gap:10px}
+.reel-v{width:100%;display:block;background:#000;border:1px solid var(--line);object-fit:cover}
+.reel-item figcaption{display:grid;gap:2px;font-size:14px}
+.reel-item figcaption b{font-weight:500}
+.reel-item figcaption .muted{font-size:13px}
+@media (max-width:760px){
+  .reel-row{overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px;margin-right:calc(var(--gutter) * -1);padding-right:var(--gutter)}
+  .reel-item{flex:0 0 auto;scroll-snap-align:start}
+  .reel-v{height:min(62vh,440px);width:auto}
+  .reel-item figcaption{width:0;min-width:100%}
+}

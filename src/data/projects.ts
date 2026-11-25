@@ -202,7 +202,7 @@ export const projects: Project[] = [
     year: '2026',
     client: 'SMILECare · i-Connect Student Society',
     role: 'Video editing & motion graphics',
-    tools: 'CapCut',
+    tools: 'CapCut, Alight Motion, Adobe Premiere Pro, After Effects',
     summary:
       'Edited and animated videos: a product video for SMILECare, an integrated health information system with AI-assisted inventory and scheduling, plus two teasers for the i-Connect Student Society: the NEXUSPATH roadmap logo reveal and a vertical Hackathon announcement.',
     did: [

@@ -93,17 +93,18 @@ export const projects: Project[] = [
     role: 'Brand identity & publication design',
     tools: 'Adobe Photoshop, Canva',
     summary:
-      'The visual identity for the i-Connect Student Society’s NEXUS term (A.Y. 2026–2027). It starts from a soft-launch logo and runs through the term’s posts: committee search, oath-taking, the IT.IS_START(); webinar, the NEXUSPATH roadmap, the Plugged-In Friday series, event highlights, greetings, and the printed bulletin board.',
+      'The visual identity for the i-Connect Student Society’s NEXUS term (A.Y. 2026–2027). It starts from a soft-launch logo and runs through the term’s posts: committee search, oath-taking, the IT.IS_START(); webinar, the NEXUSPATH roadmap, the Plugged-In Friday series, event highlights, greetings, the org jersey, and the printed bulletin board.',
     did: [
       'Designed the NEXUS logo and soft-launch reveal',
       'Built a consistent deep-blue, cosmic visual system for the term',
       'Produced publication materials for webinars, projects, event highlights, and greetings',
+      'Designed the i-CSS org jersey, carrying the NEXUS star mark',
       'Designed the large-format printed bulletin board',
       'Co-designed the IT.IS_START(); webinar pubmat with Victor Lacanienta and Michael Sarcia',
     ],
     cover: { type: 'image', src: w('i-css-soft-launch-logo') },
     gallery: [
-      'i-css-soft-launch-logo', 'i-css-soft-launch-cover-page', 'nexus-it-is-start', 'nexus-nexuspath',
+      'i-css-soft-launch-logo', 'icss-org-jersey', 'i-css-soft-launch-cover-page', 'nexus-it-is-start', 'nexus-nexuspath',
       'nexus-plugged-in-friday', 'nexus-teachers-day-highlights', 'nexus-welcome-icons', 'nexus-happy-halloween-2026',
       'nexus-all-saints-day-2026', 'i-css-committee-search', 'i-css-oath-taking-ceremony', 'i-css-congratulations-commitee',
       'i-css-congratulations-posting', 'i-css-happy-birthday-posting', 'copy-of-bulletin-board-5',

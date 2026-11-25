@@ -21,7 +21,7 @@ export const featuredOrg = {
       theme: 'NEXUS',
       role: 'Secretary & Graphics Committee',
       text: 'Designed the NEXUS identity and soft launch, the term’s publication materials, and the organization’s official website.',
-      work: ['i-css-soft-launch-logo', 'nexus-it-is-start', 'nexus-nexuspath', 'nexus-plugged-in-friday', 'i-css-committee-search', 'i-css-oath-taking-ceremony'],
+      work: ['i-css-soft-launch-logo', 'icss-org-jersey', 'nexus-it-is-start', 'nexus-nexuspath', 'nexus-plugged-in-friday', 'i-css-committee-search', 'i-css-oath-taking-ceremony'],
     },
     {
       year: 'A.Y. 2025 – 2026',

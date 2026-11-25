@@ -27,6 +27,11 @@ All content lives in **`src/data/`**. You never need to touch the design files t
 3. Change `slug` (the page address, e.g. `my-new-project`, lowercase with dashes), the text, `cats` (`'multimedia'`, `'uiux'`, `'web'`), `cover`, and `gallery`.
 4. Save, commit, and push. The site rebuilds in about a minute, and the project gets its own page at `/work/<slug>/`.
 
+### Add a video
+1. Export the video as **MP4 (H.264)**, ideally 720p–1080p and under about 25 MB, and put it in `public/videos/`.
+2. Save a still frame as a poster image in `public/images/work/`.
+3. Add it to the `videos` list of a project in `src/data/projects.ts` (see the `video-edits` project for an example).
+
 ### Add a job, organization, or certificate
 Open the matching file in `src/data/`, copy one block, paste it at the top, and edit it. Logos go in `public/images/brand/`.
 

@@ -36,14 +36,31 @@ const ogImage = p.cover.type === 'image' ? p.cover.src : p.gallery[0];
           {p.note && <p class="tagnote" style="white-space:normal;line-height:1.5">{p.note}</p>}
         </div>
       </div>
+      {p.videos && p.videos.length > 0 ? (
+        <>
+          <h2 class="mono muted" style="margin-bottom:16px">Videos · {p.videos.length}</h2>
+          <div class="videos">
+            {p.videos.map((v) => (
+              <figure class="vid">
+                <video controls playsinline preload="metadata" poster={v.poster} style={`aspect-ratio:${v.ratio}`}>
+                  <source src={v.src} type="video/mp4" />
+                  Your browser can't play this video. <a href={v.src}>Download it</a> instead.
+                </video>
+                <figcaption><b>{v.title}</b>{v.caption && <span class="muted"> · {v.caption}</span>}</figcaption>
+              </figure>
+            ))}
+          </div>
+        </>
+      ) : (
       <h2 class="mono muted" style="margin-bottom:16px">Gallery · {p.gallery.length} {p.gallery.length === 1 ? 'image' : 'images'}</h2>
-      <div class="gallery">
+      )}
+      {!p.videos && <div class="gallery">
         {p.gallery.map((src, k) => (
           <button type="button" data-lb="gallery" data-src={src} aria-label={`Open image ${k + 1} of ${p.gallery.length}`}>
             <img src={src} alt={`${p.title}, image ${k + 1}`} loading={k < 3 ? 'eager' : 'lazy'} decoding="async">
           </button>
         ))}
-      </div>
+      </div>}
       <a class="next" href={`/work/${next.slug}/`}><span class="mono">Next project →</span><b>{next.short}</b></a>
     </div>
   </article>

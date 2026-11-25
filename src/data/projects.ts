@@ -10,6 +10,8 @@
 //        { type: 'tees', designs: [a, b] }      → T-shirt mockups
 //        { type: 'banners', images: [a, b, c] } → stacked ad banners
 //        { type: 'collage', images: [...] }     → a row of images
+//        { type: 'video', poster }              → a video still with a play badge
+//   Videos: put .mp4 files in public/videos/ and list them in "videos" (see 'video-edits').
 //   4. "cats" sets the category. The FIRST one decides which group the card appears in:
 //        'multimedia' (Multimedia & Design), 'uiux' (UI/UX Design), 'web' (Web Development).
 //   5. "kind" is the short type label on the card (e.g. 'Brand identity'), and "blurb" is the
@@ -21,7 +23,10 @@ export type Cover =
   | { type: 'browser'; src: string; mobile?: string; url: string }
   | { type: 'tees'; designs: string[] }
   | { type: 'banners'; images: string[] }
-  | { type: 'collage'; images: string[] };
+  | { type: 'collage'; images: string[] }
+  | { type: 'video'; poster: string };
+
+export type Video = { src: string; poster: string; title: string; caption?: string; ratio: string };
 
 export type Project = {
   slug: string;
@@ -43,6 +48,7 @@ export type Project = {
   note?: string;
   cover: Cover;
   gallery: string[];
+  videos?: Video[]; // optional videos shown on the project page
 };
 
 const w = (n: string) => `/images/work/${n}.webp`;
@@ -182,6 +188,45 @@ export const projects: Project[] = [
     ],
     cover: { type: 'image', src: w('calori'), bg: '#fde7df', position: 'center 30%' },
     gallery: [w('calori')],
+  },
+  {
+    slug: 'video-edits',
+    title: 'Video Editing & Motion',
+    short: 'Video Edits',
+    kind: 'Video editing',
+    blurb: 'A product video for a health information system and an animated logo-reveal teaser.',
+    pieces: '2 videos',
+    cats: ['multimedia'],
+    tags: ['Video editing', 'Motion'],
+    year: '2026',
+    client: 'SMILECare · i-Connect Student Society',
+    role: 'Video editing & motion graphics',
+    tools: 'CapCut',
+    summary:
+      'Edited and animated videos: a product video for SMILECare, an integrated health information system with AI-assisted inventory and scheduling, and the NEXUSPATH logo-reveal teaser for the i-Connect Student Society roadmap.',
+    did: [
+      'Edited a 1:40 product video that walks through SMILECare’s mobile app, AI health assistant, and operations dashboards',
+      'Animated a 24-second NEXUSPATH logo reveal with light, particle, and zoom effects for the i-CSS roadmap announcement',
+      'Timed on-screen text and transitions so each feature reads clearly',
+    ],
+    cover: { type: 'video', poster: w('smilecare-poster') },
+    gallery: [w('smilecare-poster'), w('nexuspath-teaser-poster')],
+    videos: [
+      {
+        src: '/videos/smilecare-promo.mp4',
+        poster: w('smilecare-poster'),
+        title: 'SMILECare product video',
+        caption: 'An integrated health information system with AI integration for inventory and scheduling. 1:40.',
+        ratio: '16/9',
+      },
+      {
+        src: '/videos/nexuspath-teaser.mp4',
+        poster: w('nexuspath-teaser-poster'),
+        title: 'NEXUSPATH teaser',
+        caption: 'Logo reveal for the i-Connect Student Society roadmap. 0:24.',
+        ratio: '4/3',
+      },
+    ],
   },
   {
     slug: 'myeventplus-ads',

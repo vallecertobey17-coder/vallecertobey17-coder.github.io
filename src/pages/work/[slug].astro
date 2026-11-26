@@ -9,6 +9,7 @@ export function getStaticPaths() {
 const { p, i } = Astro.props;
 const next = projects[(i + 1) % projects.length];
 const pad = (n: number) => String(n).padStart(2, '0');
+const ratioNum = (r: string) => { const [a, b] = r.split('/').map(Number); return a / b; };
 const ogImage = p.cover.type === 'image' ? p.cover.src : p.gallery[0];
 ---
 <Base title={p.title} description={p.summary} image={ogImage}>
@@ -42,7 +43,7 @@ const ogImage = p.cover.type === 'image' ? p.cover.src : p.gallery[0];
           <div class="videos">
             {p.videos.map((v) => (
               <figure class="vid">
-                <video controls playsinline preload="metadata" poster={v.poster} style={`aspect-ratio:${v.ratio}`}>
+                <video controls playsinline preload="metadata" poster={v.poster} style={`aspect-ratio:${v.ratio};--r:${ratioNum(v.ratio).toFixed(4)}`}>
                   <source src={v.src} type="video/mp4" />
                   Your browser can't play this video. <a href={v.src}>Download it</a> instead.
                 </video>

@@ -478,7 +478,8 @@ footer{border-top:1px solid var(--line);padding:56px 0 28px;overflow:hidden}
 .vcover .vplay svg{width:26px;height:26px;fill:var(--frost);margin-left:3px}
 .videos{display:grid;gap:clamp(28px,4vw,48px)}
 .vid{display:grid;gap:12px}
-.vid video{width:100%;max-height:82vh;background:#000;border:1px solid var(--line);display:block}
+.vid video{width:min(100%,calc(80svh * var(--r,1.7778)));height:auto;background:#000;border:1px solid var(--line);display:block}
+.vid figcaption{max-width:65ch}
 .vid figcaption{font-size:15px}
 .vid figcaption b{font-weight:500}
 
@@ -493,9 +494,14 @@ footer{border-top:1px solid var(--line);padding:56px 0 28px;overflow:hidden}
 .reel-item figcaption{display:grid;gap:2px;font-size:14px}
 .reel-item figcaption b{font-weight:500}
 .reel-item figcaption .muted{font-size:13px}
-@media (max-width:760px){
-  .reel-row{overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px;margin-right:calc(var(--gutter) * -1);padding-right:var(--gutter)}
-  .reel-item{flex:0 0 auto;scroll-snap-align:start}
-  .reel-v{height:min(62vh,440px);width:auto}
-  .reel-item figcaption{width:0;min-width:100%}
+/* Tablet: the wide video gets its own row; the others share the next row at equal height */
+@media (max-width:1080px){
+  .reel-row{flex-wrap:wrap;row-gap:28px}
+  .reel-item.is-wide{flex-basis:100%}
+}
+/* Phone: one video per row, full width; vertical videos are capped so they fit on screen */
+@media (max-width:640px){
+  .reel-row{flex-direction:column;align-items:stretch;gap:28px}
+  .reel-item{flex:none;width:100%}
+  .reel-item.is-tall{width:min(100%,calc(72svh * var(--r)));align-self:center}
 }

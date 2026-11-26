@@ -90,7 +90,7 @@ const statement = about.statement.split(/(\*[^*]+\*)/).map((s) => (s.startsWith(
         </div>
         <div class="reel-row">
           {reel.map((v) => (
-            <figure class="reel-item" style={`--grow:${ratioNum(v.ratio).toFixed(4)}`}>
+            <figure class={`reel-item ${ratioNum(v.ratio) >= 1.5 ? 'is-wide' : ratioNum(v.ratio) < 1 ? 'is-tall' : 'is-std'}`} style={`--grow:${ratioNum(v.ratio).toFixed(4)};--r:${ratioNum(v.ratio).toFixed(4)}`}>
               <video class="reel-v" muted loop playsinline controls preload="metadata" poster={v.poster} style={`aspect-ratio:${v.ratio}`} aria-label={v.title}>
                 <source src={v.src} type="video/mp4" />
               </video>
